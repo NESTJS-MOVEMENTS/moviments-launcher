@@ -1,0 +1,9 @@
+[submodule "gateway-ms"]
+	path = gateway-ms
+	url = https://github.com/NESTJS-MOVEMENTS/gateway.git
+[submodule "client-ms"]
+	path = client-ms
+	url = https://github.com/NESTJS-MOVEMENTS/cliente-ms.git
+[submodule "cuenta-ms"]
+	path = cuenta-ms
+	url = https://github.com/NESTJS-MOVEMENTS/cuenta-ms.git
