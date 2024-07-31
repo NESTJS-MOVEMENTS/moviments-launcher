@@ -1,0 +1,48 @@
+#version: '3'
+services:
+  nats-server:
+    image: nats:latest
+    ports:
+      # solo exponemos al mundo exterior el puerto 8222, el puerto 4222 se usara para la comunicacion interna entre contenedores via nats y el contenedor por si solo abrira el puerto
+      - "8222:8222"
+  gateway-ms:
+    build: ./gateway-ms
+    ports:
+      - 3000:3000
+    volumes:
+         #pathLocal:pathContenedor
+      - ./gateway-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    # el dockerignore ignora el archivo .env por eso hay que definir las variables de entorno de manera explicita en environment.
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=${NATS_SERVERS}
+      
+  client-ms:
+    build: ./client-ms
+    # no es necesario exponer los puertos al mundo exterior
+    # ports:
+    #   - 3001:3001
+    volumes:
+         #pathLocal:pathContenedor
+      - ./client-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    # el dockerignore ignora el archivo .env por eso hay que definir las variables de entorno de manera explicita en environment.
+    environment:
+      - PORT=3001
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=${DATABASE_URL_CLIENTE}
+  cuenta-ms:
+    build: ./cuenta-ms
+    # no es necesario exponer los puertos al mundo exterior
+    # ports:
+    #   - 3002:3002
+    volumes:
+         #pathLocal:pathContenedor
+      - ./cuenta-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    # el dockerignore ignora el archivo .env por eso hay que definir las variables de entorno de manera explicita en environment.
+    environment:
+      - PORT=3002
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=${DATABASE_URL_CUENTA}
